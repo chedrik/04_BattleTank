@@ -4,9 +4,14 @@
 #include "BattleTank.h"
 
 
-void UTankBarrel::Elevate(float DegreesPerSecond)
+void UTankBarrel::Elevate(float RelativeSpeed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BAREL LOG CHECK"));
+	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1, 1);
+	auto ElevationChange = RelativeSpeed * MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds; // change per frame 
+	auto RawNewElevation = RelativeRotation.Pitch + ElevationChange;
+	auto ClampedNewElevation = FMath::Clamp<float>(RawNewElevation, MinElevationDegrees, MaxElevationDegrees);
+	SetRelativeRotation(FRotator(ClampedNewElevation, 0, 0));
+
 }
 
 

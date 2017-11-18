@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include "Tank.h"
 
 
 
@@ -50,10 +51,8 @@ bool ATankPlayerController::GetSightRayHitLocation(OUT FVector& OutHitLocation) 
 	// Deproject screen position of crosshair to world coordinates
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection)) {
-		//UE_LOG(LogTemp, Warning, TEXT("World Direction is %s"), (*LookDirection.ToString()));
 		// line trace along that direction, see what is hit
 		GetLookVectorHitLocation(OutHitLocation,LookDirection);
-		//UE_LOG(LogTemp, Warning, TEXT("HIT: %s"), *(OutHitLocation.ToString()));
 	}
 
 
