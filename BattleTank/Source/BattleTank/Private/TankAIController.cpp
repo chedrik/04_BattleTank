@@ -8,20 +8,30 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AITank = GetAITank();
 	auto PlayerTank = GetPlayerTank();
-	if (!AITank) {
-		UE_LOG(LogTemp, Warning, TEXT("No AI  Tank"));
-	}
-	else if (!PlayerTank) {
+	if (!PlayerTank) {
 		UE_LOG(LogTemp, Warning, TEXT("No Player Tank Found"));
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("AI Tank %s sees player %s"), *(AITank->GetName()),*(PlayerTank->GetName()));
+		UE_LOG(LogTemp, Warning, TEXT("AI Tank sees player %s"),*(PlayerTank->GetName()));
 	}
 }
 
-ATank* ATankAIController::GetAITank() const
+// Called every frame
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (GetPlayerTank()) 
+	{
+		//move towards player
+
+		//aim at player
+		GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
+		// fire if ready
+	}
+}
+
+ATank* ATankAIController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
 }
