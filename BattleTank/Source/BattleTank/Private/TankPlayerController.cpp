@@ -13,7 +13,7 @@ void ATankPlayerController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Not Possesing A Tank"));
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Possesing Tank %s"),*(ControlledTank->GetName()));
+		//UE_LOG(LogTemp, Warning, TEXT("Possesing Tank %s"),*(ControlledTank->GetName()));
 	}
 }
 
@@ -52,11 +52,10 @@ bool ATankPlayerController::GetSightRayHitLocation(OUT FVector& OutHitLocation) 
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection)) {
 		// line trace along that direction, see what is hit
-		GetLookVectorHitLocation(OutHitLocation,LookDirection);
+		return GetLookVectorHitLocation(OutHitLocation,LookDirection);
 	}
-
-
-	return true;
+	
+	return false;
 }
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const

@@ -14,7 +14,7 @@ void ATankAIController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("No Player Tank Found"));
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("AI Tank sees player %s"),*(PlayerTank->GetName()));
+		//UE_LOG(LogTemp, Warning, TEXT("AI Tank sees player %s"),*(PlayerTank->GetName()));
 	}
 }
 

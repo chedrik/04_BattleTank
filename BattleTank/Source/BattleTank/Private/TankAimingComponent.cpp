@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 
 // Sets default values for this component's properties
@@ -19,6 +20,10 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 	Barrel = BarrelToSet;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+	Turret = TurretToSet;
+}
 
 void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
 {
@@ -42,15 +47,7 @@ void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
-
-		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("AIM SOLUTION @ %f"), Time);
-
-	}
-	else 
-	{
-		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("NO AIM SOLUTION @ %f"), Time);
+		MoveTurretTowards(AimDirection);
 
 	}
 
@@ -64,4 +61,17 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 	
 	Barrel->Elevate(DeltaRotator.Pitch);
+
+}
+
+void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
+{
+	// calc difference between current position and aim direction
+
+	auto TurretRotator = Turret->GetForwardVector().Rotation(); //takes x direction along turret and turns into roll,pitch,yaw struct
+	auto AimAsTurretRotator = AimDirection.Rotation();
+	auto DeltaTurretRotator = AimAsTurretRotator - TurretRotator;
+
+	Turret->Rotate(DeltaTurretRotator.Yaw);
+
 }

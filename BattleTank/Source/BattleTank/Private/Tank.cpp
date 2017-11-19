@@ -3,13 +3,7 @@
 #include "Tank.h"
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
-
-
-
-void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
-{
-	TankAimingComponenet->SetBarrelReference(BarrelToSet);
-}
+#include "TankTurret.h"
 
 // Sets default values
 ATank::ATank()
@@ -41,3 +35,18 @@ void ATank::AimAt(FVector OutHitLocation)
 	TankAimingComponenet->AimAt(OutHitLocation,LaunchSpeed);
 }
 
+void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
+{
+	TankAimingComponenet->SetBarrelReference(BarrelToSet);
+}
+
+void ATank::SetTurretReference(UTankTurret * TurretToSet)
+{
+	TankAimingComponenet->SetTurretReference(TurretToSet);
+}
+
+void ATank::Fire()
+{
+	float Time = GetWorld()->GetTimeSeconds();
+	UE_LOG(LogTemp, Warning, TEXT("FIRE @ %f"), Time);
+}
