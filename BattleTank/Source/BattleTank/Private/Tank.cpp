@@ -2,6 +2,7 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Projectile.h"
@@ -13,7 +14,11 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	// add aiming component
-	TankAimingComponenet = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+
+	//add movement component
+	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
+
 }
 
 // Called when the game starts or when spawned
@@ -33,18 +38,18 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::AimAt(FVector OutHitLocation) 
 {
-	TankAimingComponenet->AimAt(OutHitLocation,LaunchSpeed);
+	TankAimingComponent->AimAt(OutHitLocation,LaunchSpeed);
 }
 
 void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
-	TankAimingComponenet->SetBarrelReference(BarrelToSet);
+	TankAimingComponent->SetBarrelReference(BarrelToSet);
 	Barrel = BarrelToSet;
 }
 
 void ATank::SetTurretReference(UTankTurret * TurretToSet)
 {
-	TankAimingComponenet->SetTurretReference(TurretToSet);
+	TankAimingComponent->SetTurretReference(TurretToSet);
 }
 
 void ATank::Fire()
