@@ -7,17 +7,32 @@
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
+	Throw = FMath::Clamp<float>(Throw, -1, 1);
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
-	// TODO prevent double addition from 2 control inputs
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw)
 {
+	Throw = FMath::Clamp<float>(Throw, -1, 1);
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
-	// TODO prevent double addition from 2 control inputs
+	// TODO investigate different friction / force for turning
 }
+
+
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
+{
+	auto TankForwardVector = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+	auto Dotted = FVector::DotProduct(TankForwardVector, AIForwardIntention);
+	auto Crossed = FVector::CrossProduct(TankForwardVector, AIForwardIntention);
+	IntendTurnRight(Crossed.Z);
+	IntendMoveForward(Dotted);
+	
+
+}
+
 
 void UTankMovementComponent::Initialize(UTankTrack* LTrackToSet, UTankTrack* RTrackToSet)
 {
@@ -26,3 +41,5 @@ void UTankMovementComponent::Initialize(UTankTrack* LTrackToSet, UTankTrack* RTr
 	RightTrack = RTrackToSet;
 
 }
+
+
