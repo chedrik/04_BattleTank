@@ -36,7 +36,7 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 
 void UTankMovementComponent::Initialize(UTankTrack* LTrackToSet, UTankTrack* RTrackToSet)
 {
-	if (!LTrackToSet || !RTrackToSet) { return; }
+	if (!ensure(LTrackToSet && RTrackToSet)) { return; }
 	LeftTrack = LTrackToSet;
 	RightTrack = RTrackToSet;
 

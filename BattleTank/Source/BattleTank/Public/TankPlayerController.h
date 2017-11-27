@@ -11,7 +11,7 @@
  * 
  */
 
-class ATank;
+class UTankAimingComponent;
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -26,8 +26,6 @@ public:
 	
 
 private:
-	ATank* GetControlledTank() const;
-
 	void AimTowardsCrosshair(); //mode tank barrel so shot hits where crosshair hits world	
 
 	bool GetSightRayHitLocation(OUT FVector& OutHitLocation) const;
@@ -42,5 +40,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float LineTraceRange = 1000000;
+
+protected:
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
+		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+
 
 };

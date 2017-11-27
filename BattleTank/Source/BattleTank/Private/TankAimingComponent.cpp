@@ -3,6 +3,7 @@
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 
 
 // Sets default values for this component's properties
@@ -14,20 +15,24 @@ UTankAimingComponent::UTankAimingComponent()
 
 	// ...
 }
-
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
+// Called when the game starts or when spawned
+void UTankAimingComponent::BeginPlay()
 {
+	Super::BeginPlay();
+	LastFireTime = FPlatformTime::Seconds();
+
+}
+void UTankAimingComponent::InitializeAiming(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
+{
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
 	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
 	Turret = TurretToSet;
+
 }
 
-void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector OutHitLocation)
 {
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -79,6 +84,22 @@ void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 	else
 	{
 		Turret->Rotate(DeltaTurretRotator.Yaw);
+	}
+
+}
+
+void UTankAimingComponent::Fire()
+{
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (!ensure(Barrel)) { return; }
+
+	if (isReloaded)
+	{
+		//spawn projectile @ barrel socket
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation("Projectile"), Barrel->GetSocketRotation("Projectile"));
+
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
 	}
 
 }
