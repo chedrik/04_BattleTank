@@ -21,4 +21,18 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		float TrackMaxDrivingForce = 150000; //Newtons/100, applied at both tracks
 	
+private:
+	UTankTrack();
+
+	void ApplySidewaysForce();
+	void DriveTrack();
+
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	float CurrentThrottle = 0;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 };

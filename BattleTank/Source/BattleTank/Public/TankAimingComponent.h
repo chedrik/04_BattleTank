@@ -15,7 +15,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	NoAmmo
 };
 
 
@@ -40,6 +41,7 @@ public:
 
 	void AimAt(FVector OutHitLocation);
 
+	EFiringState GetFiringState() const;
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
@@ -61,8 +63,9 @@ private:
 	double LastFireTime = 0;
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
-	EFiringState FiringState = EFiringState::Reloading;
-
+		EFiringState FiringState = EFiringState::Reloading;
+	UPROPERTY(BlueprintReadOnly, Category = State)
+		uint8 Ammo = 5;
 	virtual void BeginPlay() override;
 
 
