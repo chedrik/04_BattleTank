@@ -23,10 +23,11 @@ public:
 
 private:
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void SetPawn(APawn* InPawn) override;//called when possessed
 protected:
 	//how close AI tank can get to player
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
-		float AcceptanceRadius = 8000;
-	
+		float AcceptanceRadius = 3000;
+	UFUNCTION()
+		void OnPossessedTankDeath();
 };

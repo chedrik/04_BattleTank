@@ -15,5 +15,26 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentHealth = StartingHealth;
 }
 
+float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	float DamageToApply = 0.f;
+	if (DamageAmount >= CurrentHealth) {
+		DamageToApply = CurrentHealth;
+		CurrentHealth = 0.f;	
+		OnDeath.Broadcast();
+	}
+	else {
+		CurrentHealth -= DamageAmount;
+		DamageToApply = DamageAmount;
+	}
+	//UE_LOG(LogTemp, Warning, TEXT("current health: %f"), CurrentHealth);
+	return DamageToApply;
+}
+
+float ATank::GetHealthPercent() const
+{
+	return (float)CurrentHealth / (float)StartingHealth;
+}

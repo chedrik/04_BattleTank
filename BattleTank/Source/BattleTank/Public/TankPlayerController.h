@@ -31,6 +31,8 @@ private:
 	bool GetSightRayHitLocation(OUT FVector& OutHitLocation) const;
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
 	bool GetLookVectorHitLocation(FVector & HitLocation, FVector LookDirection) const;
+	
+	virtual void SetPawn(APawn* InPawn) override;//called when possessed
 
 	UPROPERTY(EditAnywhere)
 	float  CrossHairXLocation = 0.5;
@@ -45,6 +47,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
 		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
-
+	UFUNCTION()
+		void OnPossessedTankDeath();
 
 };

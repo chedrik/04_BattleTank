@@ -2,7 +2,7 @@
 
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
-
+#include "Tank.h"
 //depends on mvmt component due to pathfind
 
 void ATankAIController::BeginPlay()
@@ -17,6 +17,7 @@ void ATankAIController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	auto AITank = GetPawn();
 	auto PlayerTank = (GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (!PlayerTank) { return; }
 	if(!ensure(AITank && PlayerTank)) { return; }
 	if (ensure(PlayerTank))
 	{
@@ -30,4 +31,24 @@ void ATankAIController::Tick(float DeltaTime)
 			AimingComponent->Fire();
 		}
 	}
+}
+
+void ATankAIController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn) 
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) {return;}
+
+		//subscribe to tank death
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedTankDeath);
+	}
+}
+
+void ATankAIController::OnPossessedTankDeath()
+{
+	auto AITank = GetPawn();
+	AITank->DetachFromControllerPendingDestroy();
+
 }
